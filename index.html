@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>リコピン吸収率診断 | トマトの効率的な食べ方・飲み方クイズ</title>
+    <!-- Tailwind CSS for responsive styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Canvas Confetti for result celebration -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- html2canvas for saving result as image -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700;900&family=Fira+Code:wght@400;500&display=swap');
+        
+        body {
+            font-family: 'Zen Maru Gothic', sans-serif;
+            background-color: #fcf8f2;
+        }
+
+        .code-font {
+            font-family: 'Fira Code', monospace;
+        }
+
+        /* Pattern 3: Lifestyle & Kitchen Natural Warm Background Base */
+        .bg-kitchen-pattern {
+            background-color: #fbf6ee;
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(245, 158, 11, 0.12) 0%, transparent 45%),
+                radial-gradient(circle at 85% 20%, rgba(225, 29, 72, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 20% 85%, rgba(217, 119, 6, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, rgba(254, 215, 170, 0.3) 0%, transparent 50%);
+        }
+
+        .card-shadow {
+            box-shadow: 0 20px 40px -10px rgba(180, 83, 9, 0.12), 0 10px 25px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .btn-bounce {
+            transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.2s ease;
+        }
+        .btn-bounce:hover {
+            transform: translateY(-2px);
+        }
+        .btn-bounce:active {
+            transform: scale(0.98) translateY(0);
+        }
+
+        .kitchen-card-border {
+            border: 2px dashed #f59e0b33;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #fef3c7;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #f59e0b;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body id="app-body" class="min-h-screen text-amber-950 flex flex-col justify-between selection:bg-amber-200 bg-kitchen-pattern relative overflow-x-hidden">
+
+    <!-- Background Decorative Elements (Pattern 3 Kitchen Accents) -->
+    <div class="fixed top-12 left-5 w-36 h-36 md:w-52 md:h-52 opacity-20 pointer-events-none select-none z-0">
+        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <path fill="#D97706" d="M48.2,-63.1C61.4,-53.8,70.5,-38.4,73.8,-22.1C77.1,-5.8,74.7,11.4,67.6,26.7C60.5,42,48.7,55.4,34.1,63.1C19.5,70.8,2.1,72.8,-15,69.5C-32.1,66.2,-48.9,57.6,-59.5,43.8C-70.1,30,-74.5,11,-72.6,-7.1C-70.7,-25.2,-62.5,-42.4,-49.5,-51.9C-36.5,-61.4,-18.2,-63.2,-0.2,-62.9C17.9,-62.6,35,-60.2,48.2,-63.1Z" transform="translate(100 100) scale(0.85)" />
+        </svg>
+    </div>
+    <div class="fixed bottom-10 right-5 w-44 h-44 md:w-60 md:h-60 opacity-20 pointer-events-none select-none z-0">
+        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <path fill="#E11D48" d="M41.5,-54.6C53.8,-46.3,63.8,-33.5,67.2,-19.1C70.6,-4.7,67.4,11.3,60.1,25.2C52.8,39.1,41.4,50.9,27.8,57.8C14.2,64.7,-1.6,66.7,-17.1,62.8C-32.6,58.9,-47.8,49.1,-57.2,35.3C-66.6,21.5,-70.2,3.7,-66.9,-12.4C-63.6,-28.5,-53.4,-42.9,-40.8,-51.3C-28.2,-59.7,-14.1,-62.1,0.7,-63.1C15.5,-64.1,31,-62.9,41.5,-54.6Z" transform="translate(100 100) scale(0.85)" />
+        </svg>
+    </div>
+
+    <header class="bg-amber-50/90 backdrop-blur-md sticky top-0 z-50 border-b border-amber-200/80 shadow-sm">
+        <div class="max-w-4xl mx-auto px-4 md:px-8 py-3 flex items-center justify-between gap-4">
+            <!-- App Logo / Title -->
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="app.restart(); app.setViewMode('preview');">
+                <span class="text-2xl md:text-3xl">☕</span>
+                <div>
+                    <span class="font-extrabold text-amber-900 text-sm md:text-lg tracking-wide block leading-none">リコピン吸収率診断</span>
+                    <span class="text-[10px] md:text-xs text-amber-700 font-bold hidden sm:inline">カフェ＆キッチンStyle</span>
+                </div>
+            </div>
+
+            <!-- View Mode Switch Control (Preview / Code) -->
+            <div class="flex items-center bg-amber-100/90 p-1.5 rounded-2xl border border-amber-300/80 shadow-inner">
+                <button id="switch-btn-preview" onclick="app.setViewMode('preview')" class="px-4 py-2 rounded-xl text-xs md:text-sm font-black transition-all bg-amber-600 text-white shadow-md flex items-center gap-2">
+                    <i class="fa-solid fa-eye"></i>
+                    <span>プレビュー</span>
+                </button>
+                <button id="switch-btn-code" onclick="app.setViewMode('code')" class="px-4 py-2 rounded-xl text-xs md:text-sm font-bold transition-all text-amber-900 hover:text-amber-950 flex items-center gap-2">
+                    <i class="fa-solid fa-code"></i>
+                    <span>コード表示</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-3xl mx-auto w-full px-4 md:px-6 py-6 md:py-8 flex-grow flex flex-col justify-center relative z-10">
+
+        <!-- VIEW MODE: Code Viewer Screen -->
+        <div id="screen-code" class="hidden relative overflow-hidden bg-gray-900 rounded-3xl p-4 md:p-6 card-shadow border border-gray-800 text-gray-100 flex flex-col space-y-4">
+            <div class="flex items-center justify-between border-b border-gray-800 pb-3">
+                <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-full bg-red-500 inline-block"></span>
+                    <span class="w-3 h-3 rounded-full bg-yellow-500 inline-block"></span>
+                    <span class="w-3 h-3 rounded-full bg-green-500 inline-block"></span>
+                    <span class="text-xs font-mono text-gray-400 ml-2">index.html</span>
+                </div>
+                <button onclick="app.copySourceCode()" class="btn-bounce bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold px-4 py-2 rounded-xl flex items-center gap-2 shadow">
+                    <i class="fa-solid fa-copy"></i>
+                    <span id="copy-btn-text">コードをコピー</span>
+                </button>
+            </div>
+            <p class="text-xs text-gray-400">※以下のコードをコピーしてメモ帳などのファイル（index.html）に貼り付けると、そのままWebアプリとしてご利用いただけます。</p>
+            <pre class="overflow-x-auto text-xs code-font bg-gray-950 p-4 rounded-xl leading-relaxed text-amber-300 max-h-[550px] overflow-y-auto"><code id="code-content">&lt;!-- ソースコードを読み込み中... --&gt;</code></pre>
+        </div>
+
+        <div id="screen-welcome" class="relative overflow-hidden bg-amber-50/95 backdrop-blur-sm rounded-3xl p-6 md:p-10 card-shadow border border-amber-200 text-center space-y-8 kitchen-card-border">
+            
+            <div class="absolute top-2 right-2 w-28 h-28 text-amber-700/10 pointer-events-none">
+                <i class="fa-solid fa-utensils text-7xl"></i>
+            </div>
+
+            <div class="relative z-10 space-y-6">
+                <div class="inline-flex items-center gap-2 bg-amber-800 text-amber-50 text-xs md:text-sm font-bold px-5 py-2 rounded-full shadow-sm">
+                    <span>☕</span>
+                    <span>朝夜のキッチン習慣レシピ</span>
+                </div>
+
+                <div class="max-w-2xl mx-auto">
+                    <h1 class="text-2xl md:text-4xl font-black text-amber-950 leading-tight md:leading-snug">
+                        あなたの<span class="text-red-600 underline decoration-amber-400 decoration-wavy">リコピン吸収率</span>は何％？
+                    </h1>
+                    <p class="text-amber-900/80 text-sm md:text-base mt-3 md:mt-4 leading-relaxed font-medium">
+                        いつものキッチンでトマトジュースも一工夫で効果アップ！<br class="hidden sm:inline">
+                        全10問のキッチンクイズであなたの「リコピン活用度」を判定します。
+                    </p>
+                </div>
+
+                <div class="max-w-lg mx-auto bg-amber-100/90 backdrop-blur-sm p-5 rounded-2xl border border-amber-300/70 text-center shadow-inner">
+                    <p class="text-xs text-amber-800 font-bold tracking-wider mb-1">― 制作者からのメッセージ ―</p>
+                    <p class="text-base md:text-xl font-black text-red-800 tracking-wide italic">
+                        「願いが叶うとしたら、貴方ははじめますか？」
+                    </p>
+                </div>
+
+                <div class="relative w-28 h-28 md:w-32 md:h-32 mx-auto my-4">
+                    <div class="absolute inset-0 bg-amber-300 rounded-full animate-ping opacity-25"></div>
+                    <div class="relative bg-gradient-to-tr from-amber-600 via-rose-500 to-red-500 w-full h-full rounded-full flex items-center justify-center text-5xl md:text-6xl shadow-inner border-4 border-amber-50">
+                        🍅
+                    </div>
+                </div>
+
+                <div class="max-w-md mx-auto">
+                    <button onclick="app.startQuiz()" class="btn-bounce w-full bg-gradient-to-r from-amber-600 via-orange-600 to-rose-600 hover:from-amber-700 hover:to-rose-700 text-white font-extrabold text-lg py-4 px-8 rounded-2xl shadow-lg shadow-amber-300/60 flex items-center justify-center gap-3">
+                        <span>診断をはじめる</span>
+                        <i class="fa-solid fa-arrow-right text-base"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="screen-quiz" class="hidden relative overflow-hidden bg-amber-50/95 backdrop-blur-sm rounded-3xl p-6 md:p-10 card-shadow border border-amber-200 flex flex-col justify-between min-h-[480px] kitchen-card-border">
+
+            <div class="relative z-10 flex flex-col justify-between h-full">
+                <div>
+                    <div class="flex justify-between items-center text-xs md:text-sm font-bold text-amber-800/80 mb-3">
+                        <span id="quiz-story-tag" class="text-amber-900 font-extrabold bg-amber-200/80 px-3 py-1 rounded-md border border-amber-300/60">
+                            🍳 キッチンのリコピン工夫
+                        </span>
+                        <span id="quiz-progress-text" class="text-red-700 font-black">第 1 問 / 全 10 問</span>
+                    </div>
+
+                    <div class="w-full bg-amber-200/60 rounded-full h-2.5 overflow-hidden">
+                        <div id="quiz-progress-bar" class="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 h-2.5 rounded-full transition-all duration-500" style="width: 10%"></div>
+                    </div>
+
+                    <div class="mt-6 mb-6">
+                        <span class="inline-block bg-amber-200 text-amber-900 text-xs md:text-sm font-extrabold px-3 py-1 rounded-lg mb-2">Q<span id="q-num">1</span></span>
+                        <h2 id="q-title" class="text-base md:text-xl font-bold text-amber-950 leading-relaxed">
+                            質問がここに表示されます
+                        </h2>
+                    </div>
+                </div>
+
+                <div id="q-options" class="grid grid-cols-1 md:grid-cols-2 gap-3.5 my-2">
+                    <!-- Option buttons -->
+                </div>
+
+                <div id="quiz-feedback" class="hidden mt-5 p-5 rounded-2xl border transition-all">
+                    <div class="flex items-center gap-2 font-black text-base md:text-lg mb-2" id="feedback-header"></div>
+                    <p id="feedback-text" class="text-xs md:text-sm text-amber-950 leading-relaxed font-medium"></p>
+                    <div class="mt-4 max-w-xs mx-auto">
+                        <button id="btn-next" onclick="app.nextQuestion()" class="btn-bounce w-full bg-amber-700 hover:bg-amber-800 text-white font-bold py-3 px-6 rounded-xl shadow flex items-center justify-center gap-2 text-sm md:text-base">
+                            <span>次の問題へ</span>
+                            <i class="fa-solid fa-chevron-right text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="screen-result" class="hidden space-y-6">
+            <div id="result-card" class="relative overflow-hidden bg-amber-50/95 backdrop-blur-sm rounded-3xl p-6 md:p-10 card-shadow border border-amber-300 text-center kitchen-card-border">
+                
+                <div class="relative z-10 space-y-6">
+                    <div class="inline-block bg-gradient-to-r from-amber-700 via-orange-600 to-red-600 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-sm">
+                        ☕ あなたのキッチンパーソナル結果
+                    </div>
+
+                    <p class="text-xs font-bold text-amber-700 uppercase tracking-widest mb-1">YOUR LYCOPENE SCORE</p>
+                    
+                    <div>
+                        <span class="text-amber-800 font-bold text-sm">リコピン吸収効率</span>
+                        <div class="text-5xl md:text-7xl font-black text-red-600 my-2 tracking-tight">
+                            <span id="res-score">0</span><span class="text-3xl md:text-4xl">%</span>
+                        </div>
+                        <div id="res-badge" class="inline-block bg-amber-200 text-amber-950 text-sm font-extrabold px-5 py-2 rounded-full border border-amber-400 shadow-sm">
+                            称号: 判定中...
+                        </div>
+                    </div>
+
+                    <div class="bg-amber-100/80 p-4 rounded-2xl border border-amber-200 max-w-xl mx-auto">
+                        <p id="res-summary-text" class="text-xs md:text-sm font-bold text-amber-950 leading-relaxed">
+                            あなたのトマトの食べ方・知識レベルを判定しました！
+                        </p>
+                    </div>
+
+                    <!-- Creator Message Block -->
+                    <div class="bg-gradient-to-br from-amber-900 via-amber-800 to-rose-950 text-white p-6 md:p-8 rounded-2xl shadow-md text-left space-y-4 max-w-2xl mx-auto border border-amber-700">
+                        <p class="text-xs text-amber-300 font-bold tracking-wider flex items-center gap-2">
+                            <i class="fa-solid fa-heart text-amber-400"></i>
+                            <span>制作者からのメッセージ</span>
+                        </p>
+                        <div class="text-xs md:text-sm leading-relaxed space-y-3 text-amber-100 font-medium">
+                            <p>
+                                朝と夜のトマトジュース長期習慣化のきっかけは、始まり2週間目にむくみが消え、両足の間に隙間ができたことでした。年々効果は増え続け、「どこまで増え続けるんだろう〜？」と、楽しみになりました。摂取5年目の今、安定してリバウンドしていません。
+                            </p>
+                            <p>
+                                リコピンは、体の中の余分なものを排除してくれます。摂れば摂るほど、体は正直です。摂取開始から体重も年々落ち続け、今では5年目で計6キロ落ちました。5年目にして、ようやく自分が好きになれました。
+                            </p>
+                        </div>
+                        <div class="pt-3 border-t border-amber-700/60 text-center">
+                            <span class="text-amber-300 font-black italic text-base md:text-xl block tracking-wide">
+                                「願いが叶うとしたら、貴方ははじめますか？」
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- AI Advice Box -->
+                    <div class="text-left max-w-2xl mx-auto">
+                        <h3 class="text-xs font-bold text-amber-800 uppercase tracking-wider mb-2 flex items-center gap-2">
+                            <i class="fa-solid fa-wand-magic-sparkles text-amber-600"></i>
+                            <span>AI管理栄養士からのパーソナルアドバイス</span>
+                        </h3>
+                        <div id="ai-advice-box" class="bg-amber-100/60 border border-amber-200 rounded-2xl p-5 text-xs md:text-sm text-amber-950 leading-relaxed">
+                            <p class="animate-pulse text-amber-600">アドバイスを作成しています...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl mx-auto">
+                <button onclick="app.downloadCard()" class="btn-bounce bg-amber-700 hover:bg-amber-800 text-white font-bold py-3.5 px-6 rounded-2xl shadow flex items-center justify-center gap-2 text-sm md:text-base">
+                    <i class="fa-solid fa-download"></i>
+                    <span>画像を保存</span>
+                </button>
+
+                <button onclick="app.restart()" class="btn-bounce bg-amber-50 hover:bg-amber-100 text-amber-900 font-bold py-3.5 px-6 rounded-2xl border border-amber-300 shadow-sm flex items-center justify-center gap-2 text-sm md:text-base">
+                    <i class="fa-solid fa-rotate-right"></i>
+                    <span>もう一度診断する</span>
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="bg-amber-100/60 backdrop-blur-sm border-t border-amber-200/60 py-4 text-center text-xs text-amber-800/80 relative z-10 font-medium">
+        <p>© リコピン吸収率診断 | 毎日のトマトジュース習慣を応援します</p>
+    </footer>
+
+    <script>
+        const QUIZ_DATA = [
+            {
+                id: 1,
+                question: "トマトやトマトジュースの栄養「リコピン」の吸収率を一番高める調理法は？",
+                options: [
+                    "生で冷やしてそのまま食べる",
+                    "温めて、オリーブオイルと一緒に摂る",
+                    "細かくすりおろして生のまま飲む",
+                    "冷凍庫で凍らせてシャーベットにする"
+                ],
+                correct: 1,
+                explanation: "リコピンは油に溶けやすく、温めることで吸収率がアップ！トマトジュースもレンジで少し温めてオイルを少量垂らすのが最高の摂り方です。"
+            },
+            {
+                id: 2,
+                question: "トマトジュースを飲む時、一緒に混ぜると吸収率がさらに高まるものは？",
+                options: [
+                    "たっぷりの氷",
+                    "オリーブオイル（または牛乳・豆乳）",
+                    "お酢",
+                    "お塩"
+                ],
+                correct: 1,
+                explanation: "リコピンは良質な油分（オイルや乳脂肪）と一緒に摂ると吸収率が跳ね上がります！オリーブオイルを数滴垂らすだけで味わいもまろやかに。"
+            },
+            {
+                id: 3,
+                question: "トマトジュースを生活に取り入れ、無理なく長期習慣化してカラダを整える最高のタイミングは？",
+                options: [
+                    "お昼ごはんの時に1杯だけ",
+                    "ハードな運動をした直後",
+                    "深夜にお腹が空いた時の夜食代わり",
+                    "朝の始まりと、夜のリセット（1日計2回）"
+                ],
+                correct: 3,
+                explanation: "【大正解！】朝はリコピン吸収率が最も高まる黄金時間。さらに夜にも摂ることで1日のダメージをリセット！この「朝夜2回」の継続こそが理想の習慣です。"
+            },
+            {
+                id: 4,
+                question: "同じ量で比べた場合、生トマトよりもリコピンが凝縮されて吸収しやすいのは？",
+                options: [
+                    "大きな生トマト",
+                    "トマトジュースやトマトペースト",
+                    "ミニトマト（生のまま）",
+                    "塩漬けトマト"
+                ],
+                correct: 1,
+                explanation: "トマトジュースなどの加工品は加熱・破砕処理がされているため細胞壁が壊れており、生のまま食べるよりリコピンを効率よく吸収できます。"
+            },
+            {
+                id: 5,
+                question: "トマトジュースに「牛乳」や「チーズ」を合わせるのがおすすめな理由は？",
+                options: [
+                    "酸味が消えるから",
+                    "乳製品の「脂質」がリコピンの吸収を助けてくれるから",
+                    "カルシウムでリコピンが増えるから",
+                    "特に意味はない"
+                ],
+                correct: 1,
+                explanation: "牛乳やチーズに含まれる乳脂肪も油の一種！ホットトマトジュースに牛乳を加えたりチーズを浮かべると美味しく栄養吸収が高まります。"
+            },
+            {
+                id: 6,
+                question: "リコピンをしっかり補給したい時、市販のトマトジュースを選ぶポイントは？",
+                options: [
+                    "食塩無添加・濃い完熟トマト100%を選ぶ",
+                    "さらさらした薄い味を選ぶ",
+                    "砂糖が多く入った甘い味を選ぶ",
+                    "どれを選んでも同じ"
+                ],
+                correct: 0,
+                explanation: "真っ赤に熟した完熟トマトを使用した無塩100%ジュースが、最もピュアで豊富にリコピンを摂取できます。"
+            },
+            {
+                id: 7,
+                question: "少し青みが残った生トマトを買ってきた時、リコピンを増やす保存方法は？",
+                options: [
+                    "すぐに冷蔵庫の奥に入れる",
+                    "常温で日光を避けて追熟（赤く）させる",
+                    "冷凍庫で冷やす",
+                    "水につけておく"
+                ],
+                correct: 1,
+                explanation: "青みが残るトマトは15〜25℃の常温で保存すると赤く熟し、リコピンの量がどんどん増えていきます！"
+            },
+            {
+                id: 8,
+                question: "トマトジュースをレンジで温める「ホットトマトジュース」のメリットは？",
+                options: [
+                    "内臓を冷やさず、温め＆オイルで吸収率が格段に高まる",
+                    "栄養が全部消える",
+                    "カロリーが爆発的に高くなる",
+                    "特にない"
+                ],
+                correct: 0,
+                explanation: "温めることで体が温まり代謝もケアできる上、リコピンが吸収されやすい構造に変化する一石二鳥の飲み方です。"
+            },
+            {
+                id: 9,
+                question: "温めたトマトジュースに小さじ半分の入れると、まるでスープのように本格的になる油は？",
+                options: [
+                    "ラー油",
+                    "エクストラバージンオリーブオイル",
+                    "サラダ油",
+                    "ごま油"
+                ],
+                correct: 1,
+                explanation: "オリーブオイルの爽やかな香りとトマトの酸味がマッチし、美味しい美容スープ感覚で手軽に続けられます。"
+            },
+            {
+                id: 10,
+                question: "「生のまま食べる」のに比べて、「温めて＋油と一緒に摂る」とリコピンの吸収率は約何倍？",
+                options: [
+                    "ほとんど変わらない（1.1倍）",
+                    "約 3〜4倍 に跳ね上がる",
+                    "約 100倍になる",
+                    "逆に減ってしまう"
+                ],
+                correct: 1,
+                explanation: "「温める＋油をちょい足し」という工夫ひとつで、吸収率は約3〜4倍に上がります！毎日の習慣にぜひ取り入れてみてください。"
+            }
+        ];
+
+        class QuizApp {
+            constructor() {
+                this.currentIndex = 0;
+                this.score = 0;
+                this.viewMode = 'preview'; // 'preview' or 'code'
+                this.currentScreen = 'screen-welcome';
+            }
+
+            setViewMode(mode) {
+                this.viewMode = mode;
+                const btnPreview = document.getElementById('switch-btn-preview');
+                const btnCode = document.getElementById('switch-btn-code');
+                const screenCode = document.getElementById('screen-code');
+
+                if (mode === 'code') {
+                    btnPreview.className = "px-4 py-2 rounded-xl text-xs md:text-sm font-bold transition-all text-amber-900 hover:text-amber-950 flex items-center gap-2";
+                    btnCode.className = "px-4 py-2 rounded-xl text-xs md:text-sm font-black transition-all bg-gray-900 text-white shadow-md flex items-center gap-2";
+                    
+                    document.getElementById('screen-welcome').classList.add('hidden');
+                    document.getElementById('screen-quiz').classList.add('hidden');
+                    document.getElementById('screen-result').classList.add('hidden');
+                    screenCode.classList.remove('hidden');
+
+                    document.getElementById('code-content').textContent = document.documentElement.outerHTML;
+                } else {
+                    btnPreview.className = "px-4 py-2 rounded-xl text-xs md:text-sm font-black transition-all bg-amber-600 text-white shadow-md flex items-center gap-2";
+                    btnCode.className = "px-4 py-2 rounded-xl text-xs md:text-sm font-bold transition-all text-amber-900 hover:text-amber-950 flex items-center gap-2";
+
+                    screenCode.classList.add('hidden');
+                    document.getElementById(this.currentScreen).classList.remove('hidden');
+                }
+            }
+
+            copySourceCode() {
+                const codeText = document.documentElement.outerHTML;
+                const tempTextArea = document.createElement('textarea');
+                tempTextArea.value = codeText;
+                document.body.appendChild(tempTextArea);
+                tempTextArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(tempTextArea);
+
+                const copyBtnText = document.getElementById('copy-btn-text');
+                copyBtnText.innerText = "コピー完了！";
+                setTimeout(() => {
+                    copyBtnText.innerText = "コードをコピー";
+                }, 2000);
+            }
+
+            startQuiz() {
+                this.currentIndex = 0;
+                this.score = 0;
+
+                this.currentScreen = 'screen-quiz';
+                document.getElementById('screen-welcome').classList.add('hidden');
+                document.getElementById('screen-result').classList.add('hidden');
+                document.getElementById('screen-quiz').classList.remove('hidden');
+
+                this.renderQuestion();
+            }
+
+            renderQuestion() {
+                const current = QUIZ_DATA[this.currentIndex];
+                const total = QUIZ_DATA.length;
+                const progressPct = Math.round(((this.currentIndex + 1) / total) * 100);
+
+                document.getElementById('quiz-progress-text').innerText = `第 ${this.currentIndex + 1} 問 / 全 ${total} 問`;
+                document.getElementById('quiz-progress-bar').style.width = `${progressPct}%`;
+
+                document.getElementById('q-num').innerText = this.currentIndex + 1;
+                document.getElementById('q-title').innerText = current.question;
+
+                document.getElementById('quiz-feedback').classList.add('hidden');
+
+                const optionsContainer = document.getElementById('q-options');
+                optionsContainer.innerHTML = '';
+
+                current.options.forEach((optText, idx) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'btn-bounce w-full text-left p-4 rounded-2xl border-2 border-amber-200 hover:border-amber-400 bg-white/90 hover:bg-amber-100/60 transition-all font-bold text-amber-950 flex items-center justify-between group shadow-sm';
+                    btn.onclick = () => this.selectOption(idx);
+
+                    btn.innerHTML = `
+                        <div class="flex items-center space-x-3">
+                            <span class="w-7 h-7 rounded-full bg-amber-200 text-amber-900 font-extrabold text-xs flex items-center justify-center group-hover:bg-amber-700 group-hover:text-white transition-colors shrink-0">
+                                ${idx + 1}
+                            </span>
+                            <span class="text-xs md:text-sm leading-snug">${optText}</span>
+                        </div>
+                        <i class="fa-regular fa-circle text-amber-300 group-hover:text-amber-600 shrink-0 ml-2"></i>
+                    `;
+                    optionsContainer.appendChild(btn);
+                });
+            }
+
+            selectOption(selectedIndex) {
+                const current = QUIZ_DATA[this.currentIndex];
+                const isCorrect = (selectedIndex === current.correct);
+
+                if (isCorrect) this.score++;
+
+                const optBtns = document.getElementById('q-options').querySelectorAll('button');
+                optBtns.forEach((btn, idx) => {
+                    btn.onclick = null;
+                    if (idx === current.correct) {
+                        btn.className = 'w-full text-left p-4 rounded-2xl border-2 border-amber-600 bg-amber-100 font-bold text-amber-950 flex items-center justify-between shadow-sm';
+                    } else if (idx === selectedIndex && !isCorrect) {
+                        btn.className = 'w-full text-left p-4 rounded-2xl border-2 border-rose-400 bg-rose-50 font-bold text-rose-900 opacity-80 flex items-center justify-between shadow-sm';
+                    } else {
+                        btn.className = 'w-full text-left p-4 rounded-2xl border-2 border-amber-100 bg-amber-50/50 opacity-50 font-medium text-amber-700 flex items-center justify-between';
+                    }
+                });
+
+                const feedbackBox = document.getElementById('quiz-feedback');
+                const header = document.getElementById('feedback-header');
+                const text = document.getElementById('feedback-text');
+
+                if (isCorrect) {
+                    feedbackBox.className = "mt-5 p-5 rounded-2xl border border-amber-300 bg-amber-100/90 text-amber-950";
+                    header.innerHTML = `<i class="fa-solid fa-circle-check text-amber-700"></i> <span>正解！</span>`;
+                } else {
+                    feedbackBox.className = "mt-5 p-5 rounded-2xl border border-rose-300 bg-rose-50/90 text-rose-950";
+                    header.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-600"></i> <span>惜しい！</span>`;
+                }
+
+                text.innerText = current.explanation;
+                feedbackBox.classList.remove('hidden');
+            }
+
+            nextQuestion() {
+                this.currentIndex++;
+                if (this.currentIndex < QUIZ_DATA.length) {
+                    this.renderQuestion();
+                } else {
+                    this.showResults();
+                }
+            }
+
+            showResults() {
+                this.currentScreen = 'screen-result';
+
+                document.getElementById('screen-quiz').classList.add('hidden');
+                document.getElementById('screen-result').classList.remove('hidden');
+
+                const percentage = Math.round((this.score / QUIZ_DATA.length) * 100);
+                document.getElementById('res-score').innerText = percentage;
+
+                let title = "";
+                let summary = "";
+
+                if (percentage >= 90) {
+                    title = "🍅 リコピンマスター級";
+                    summary = "素晴らしい！トマトジュースやリコピンの効率的な摂り方を完璧にマスターしています！朝・夜の習慣で理想のカラダをキープしましょう。";
+                } else if (percentage >= 70) {
+                    title = "✨ リコピン上級者";
+                    summary = "かなりのトマト活用術をお持ちです！「温め＋オリーブオイル」をプラスすれば吸収率はさらに最高潮へ！";
+                } else if (percentage >= 40) {
+                    title = "🌱 リコピン見習い";
+                    summary = "伸びしろタップリ！生で食べるだけでなく、トマトジュースを温めたりオイルを数滴垂らす工夫で吸収効率が劇変します。";
+                } else {
+                    title = "🐣 もったいないビギナー";
+                    summary = "実はこれまでの食べ方、リコピンをかなりもったいなく逃していたかも？トマトジュースの温め＆朝夜習慣で激変させましょう！";
+                }
+
+                document.getElementById('res-badge').innerText = `称号: ${title}`;
+                document.getElementById('res-summary-text').innerText = summary;
+
+                if (typeof confetti === 'function') {
+                    confetti({
+                        particleCount: 90,
+                        spread: 80,
+                        origin: { y: 0.6 }
+                    });
+                }
+
+                this.generateAdvice(percentage);
+            }
+
+            generateAdvice(rate) {
+                const box = document.getElementById('ai-advice-box');
+                let adviceText = "";
+
+                if (rate >= 80) {
+                    adviceText = `あなたのリコピン吸収知識は素晴らしい水準です！トマトジュースを「朝の始まり」と「夜のリセット」の1日2回に分けて温め＋オイルで摂るスタイルは、体調や代謝を整える上で最も理想的。<br><br><strong class="text-amber-800 font-bold">「願いが叶うとしたら、貴方ははじめますか？」</strong>`;
+                } else if (rate >= 50) {
+                    adviceText = `少しの工夫でリコピンの吸収率は3〜4倍に上がります。冷たいまま飲むのではなく、レンジで軽く温めてオリーブオイルをチョイ足し。「朝と夜」の2回習慣を今日からスタートしてみませんか？<br><br><strong class="text-amber-800 font-bold">「願いが叶うとしたら、貴方ははじめますか？」</strong>`;
+                } else {
+                    adviceText = `今まで知らなかったコツがたくさんあったはず！トマトジュースの加熱＆オリーブオイル、そして「朝と夜の習慣化」が理想の自分へと近づく一番の近道です。<br><br><strong class="text-amber-800 font-bold">「願いが叶うとしたら、貴方ははじめますか？」</strong>`;
+                }
+
+                box.innerHTML = `<p class="leading-relaxed font-medium text-amber-950">${adviceText}</p>`;
+            }
+
+            downloadCard() {
+                const card = document.getElementById('result-card');
+                if (typeof html2canvas === 'function') {
+                    html2canvas(card, { scale: 2, useCORS: true }).then(canvas => {
+                        const link = document.createElement('a');
+                        link.download = 'lycopene_kitchen_result.png';
+                        link.href = canvas.toDataURL('image/png');
+                        link.click();
+                    });
+                }
+            }
+
+            restart() {
+                this.currentScreen = 'screen-welcome';
+                document.getElementById('screen-welcome').classList.remove('hidden');
+                document.getElementById('screen-quiz').classList.add('hidden');
+                document.getElementById('screen-result').classList.add('hidden');
+            }
+        }
+
+        let app;
+        window.onload = function() {
+            app = new QuizApp();
+        };
+    </script>
+</body>
+</html>
