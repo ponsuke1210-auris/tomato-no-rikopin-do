@@ -68,7 +68,7 @@
 </head>
 <body id="app-body" class="min-h-screen text-amber-950 flex flex-col justify-between selection:bg-amber-200 bg-kitchen-pattern relative overflow-x-hidden">
 
-    <!-- Background Decorative Elements (Pattern 3 Kitchen Accents) -->
+    <!-- Background Decorative Elements -->
     <div class="fixed top-12 left-5 w-36 h-36 md:w-52 md:h-52 opacity-20 pointer-events-none select-none z-0">
         <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
             <path fill="#D97706" d="M48.2,-63.1C61.4,-53.8,70.5,-38.4,73.8,-22.1C77.1,-5.8,74.7,11.4,67.6,26.7C60.5,42,48.7,55.4,34.1,63.1C19.5,70.8,2.1,72.8,-15,69.5C-32.1,66.2,-48.9,57.6,-59.5,43.8C-70.1,30,-74.5,11,-72.6,-7.1C-70.7,-25.2,-62.5,-42.4,-49.5,-51.9C-36.5,-61.4,-18.2,-63.2,-0.2,-62.9C17.9,-62.6,35,-60.2,48.2,-63.1Z" transform="translate(100 100) scale(0.85)"></path>
@@ -82,7 +82,6 @@
 
     <header class="bg-amber-50/90 backdrop-blur-md sticky top-0 z-50 border-b border-amber-200/80 shadow-sm">
         <div class="max-w-4xl mx-auto px-4 md:px-8 py-3 flex items-center justify-between gap-4">
-            <!-- App Logo / Title -->
             <div class="flex items-center space-x-3 cursor-pointer" onclick="app.restart(); app.setViewMode('preview');">
                 <span class="text-2xl md:text-3xl">☕</span>
                 <div>
@@ -91,7 +90,6 @@
                 </div>
             </div>
 
-            <!-- View Mode Switch Control (Preview / Code) -->
             <div class="flex items-center bg-amber-100/90 p-1.5 rounded-2xl border border-amber-300/80 shadow-inner">
                 <button id="switch-btn-preview" onclick="app.setViewMode('preview')" class="px-4 py-2 rounded-xl text-xs md:text-sm font-black transition-all bg-amber-600 text-white shadow-md flex items-center gap-2">
                     <i class="fa-solid fa-eye"></i>
@@ -107,7 +105,7 @@
 
     <main class="max-w-3xl mx-auto w-full px-4 md:px-6 py-6 md:py-8 flex-grow flex flex-col justify-center relative z-10">
 
-        <!-- VIEW MODE: Code Viewer Screen -->
+        <!-- SCREEN: Code -->
         <div id="screen-code" class="hidden relative overflow-hidden bg-gray-900 rounded-3xl p-4 md:p-6 card-shadow border border-gray-800 text-gray-100 flex flex-col space-y-4">
             <div class="flex items-center justify-between border-b border-gray-800 pb-3">
                 <div class="flex items-center gap-2">
@@ -125,8 +123,8 @@
             <pre class="overflow-x-auto text-xs code-font bg-gray-950 p-4 rounded-xl leading-relaxed text-amber-300 max-h-[550px] overflow-y-auto"><code id="code-content">&lt;!-- ソースコードを読み込み中... --&gt;</code></pre>
         </div>
 
+        <!-- SCREEN: Welcome -->
         <div id="screen-welcome" class="relative overflow-hidden bg-amber-50/95 backdrop-blur-sm rounded-3xl p-6 md:p-10 card-shadow border border-amber-200 text-center space-y-8 kitchen-card-border">
-            
             <div class="absolute top-2 right-2 w-28 h-28 text-amber-700/10 pointer-events-none">
                 <i class="fa-solid fa-utensils text-7xl"></i>
             </div>
@@ -170,8 +168,8 @@
             </div>
         </div>
 
+        <!-- SCREEN: Quiz -->
         <div id="screen-quiz" class="hidden relative overflow-hidden bg-amber-50/95 backdrop-blur-sm rounded-3xl p-6 md:p-10 card-shadow border border-amber-200 flex flex-col justify-between min-h-[480px] kitchen-card-border">
-
             <div class="relative z-10 flex flex-col justify-between h-full">
                 <div>
                     <div class="flex justify-between items-center text-xs md:text-sm font-bold text-amber-800/80 mb-3">
@@ -193,9 +191,7 @@
                     </div>
                 </div>
 
-                <div id="q-options" class="grid grid-cols-1 md:grid-cols-2 gap-3.5 my-2">
-                    <!-- Option buttons -->
-                </div>
+                <div id="q-options" class="grid grid-cols-1 md:grid-cols-2 gap-3.5 my-2"></div>
 
                 <div id="quiz-feedback" class="hidden mt-5 p-5 rounded-2xl border transition-all">
                     <div class="flex items-center gap-2 font-black text-base md:text-lg mb-2" id="feedback-header"></div>
@@ -210,9 +206,9 @@
             </div>
         </div>
 
+        <!-- SCREEN: Result -->
         <div id="screen-result" class="hidden space-y-6">
             <div id="result-card" class="relative overflow-hidden bg-amber-50/95 backdrop-blur-sm rounded-3xl p-6 md:p-10 card-shadow border border-amber-300 text-center kitchen-card-border">
-                
                 <div class="relative z-10 space-y-6">
                     <div class="inline-block bg-gradient-to-r from-amber-700 via-orange-600 to-red-600 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-sm">
                         ☕ あなたのキッチンパーソナル結果
@@ -293,7 +289,6 @@
                 </button>
             </div>
         </div>
-
     </main>
 
     <footer class="bg-amber-100/60 backdrop-blur-sm border-t border-amber-200/60 py-4 text-center text-xs text-amber-800/80 relative z-10 font-medium">
@@ -428,7 +423,7 @@
             constructor() {
                 this.currentIndex = 0;
                 this.score = 0;
-                this.viewMode = 'preview'; // 'preview' or 'code'
+                this.viewMode = 'preview';
                 this.currentScreen = 'screen-welcome';
             }
 
