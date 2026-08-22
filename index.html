@@ -294,6 +294,13 @@
                     朝の1杯・夜の1杯を飲んだらポチッとタップ！あなたの体に起こる変化を楽しみに記録しましょう。
                 </p>
 
+                <div class="max-w-2xl mx-auto rounded-xl border border-amber-300/70 bg-amber-50/80 px-4 py-3 text-left text-[11px] md:text-xs leading-relaxed text-amber-800/90">
+                    <p class="font-bold">※ 【ご利用にあたってのお願い】</p>
+                    <p class="mt-1">
+                        トマトには豊富な栄養（カリウム等）が含まれています。通院中の方や食事・水分制限を受けられている方は、無理をせず、事前にかかりつけの医師や専門医にご相談のうえお楽しみください。体調に合わせて心地よく続けていきましょう🍅
+                    </p>
+                </div>
+
                 <!-- Knock count banner -->
                 <div class="text-xs font-bold text-amber-800 bg-amber-100/90 py-1.5 px-4 rounded-xl inline-block border border-amber-300/80">
                     🚪 習慣化に挑戦中の仲間：累計 <span id="knock-count-display-sheet" class="text-red-700 font-black">--</span> 人
@@ -341,7 +348,7 @@
 
                 <div class="pt-2 max-w-md mx-auto">
                     <!-- 公式アカウントURLが決まり次第、下部の APP_CONFIG.lineOfficialUrl だけを変更してください -->
-                    <a id="line-official-link" href="https://line.me" target="_blank" rel="noopener noreferrer" class="btn-bounce inline-flex w-full items-center justify-center gap-3 bg-[#06C755] hover:bg-[#05b34c] text-white font-black text-base py-3.5 px-6 rounded-2xl shadow-md">
+                    <a id="line-official-link" href="https://line.me" target="_blank" rel="noopener noreferrer" onclick="event.preventDefault(); alert('🍅 公式LINEは本公開に向けて現在準備中です。楽しみにお待ちくださいね！');" class="btn-bounce inline-flex w-full items-center justify-center gap-3 bg-[#06C755] hover:bg-[#05b34c] text-white font-black text-base py-3.5 px-6 rounded-2xl shadow-md">
                         <i class="fa-brands fa-line text-2xl"></i>
                         <span>公式LINEで感想を送る・モニターに応募</span>
                     </a>
@@ -558,7 +565,7 @@
             loadKnockCount() {
                 const stored = localStorage.getItem('lycopene_knock_count');
                 const parsed = Number.parseInt(stored, 10);
-                return Number.isFinite(parsed) && parsed >= 0 ? parsed : 128; // 初期値128名
+                return Number.isFinite(parsed) && parsed >= 0 ? parsed : 0; // フェーズ1の初期値は0名
             }
 
             incrementKnockCount() {
