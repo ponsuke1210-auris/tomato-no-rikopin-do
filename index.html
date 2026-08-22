@@ -348,7 +348,7 @@
 
                 <div class="pt-2 max-w-md mx-auto">
                     <!-- 公式アカウントURLが決まり次第、下部の APP_CONFIG.lineOfficialUrl だけを変更してください -->
-                    <a id="line-official-link" href="https://line.me" target="_blank" rel="noopener noreferrer" onclick="event.preventDefault(); alert('🍅 公式LINEは本公開に向けて現在準備中です。楽しみにお待ちくださいね！');" class="btn-bounce inline-flex w-full items-center justify-center gap-3 bg-[#06C755] hover:bg-[#05b34c] text-white font-black text-base py-3.5 px-6 rounded-2xl shadow-md">
+                    <a id="line-official-link" href="https://line.me" target="_blank" rel="noopener noreferrer" onclick="event.preventDefault(); this.innerHTML='<span>🍅 公式LINEは本公開に向けて準備中です（お楽しみに！）</span>'; this.className='inline-flex w-full items-center justify-center bg-amber-100 border border-amber-300 text-amber-900 shadow-none pointer-events-none font-bold text-sm py-3.5 px-6 rounded-2xl'; this.removeAttribute('target'); this.setAttribute('aria-disabled', 'true');" class="btn-bounce inline-flex w-full items-center justify-center gap-3 bg-[#06C755] hover:bg-[#05b34c] text-white font-black text-base py-3.5 px-6 rounded-2xl shadow-md">
                         <i class="fa-brands fa-line text-2xl"></i>
                         <span>公式LINEで感想を送る・モニターに応募</span>
                     </a>
